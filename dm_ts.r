@@ -12,12 +12,12 @@ dat$species[is.na(dat$species)] = "NA"
 #krat exclosures only
 #dat = dat[dat$plot %in% c(3,6,13,15,18,19,20,21),]
 
-sp = c("PP")
+sp = c("DM")
 
 species = dat[dat$species %in% sp,]
 species_count_period = aggregate(species$yr,
-                          by=list(period=species$period),
-                          FUN=length)
+                                 by=list(period=species$period),
+                                 FUN=length)
 
 perioddates = get_period_dates(species)
 
@@ -29,8 +29,8 @@ species_count_period$datetime = as.POSIXct(paste(species_count_period$yr,
                                            format='%Y%m%d')
 
 species_count_yr = aggregate(species$yr,
-                          by=list(yr=species$yr),
-                          FUN=length)
+                             by=list(yr=species$yr),
+                             FUN=length)
 
 per1 = aggregate(dat$period,by=list(yr= dat$yr,period=dat$period),
                  FUN=length)
@@ -42,16 +42,19 @@ species_count_yr = merge(species_count_yr,periods,by.x='yr',by.y='yr')
 plot(species_count_period$datetime,species_count_period$x,xlab = '',ylab='animals per census',main=sp)
 lines(species_count_period$datetime,species_count_period$x)
 
+plot(species_count_yr$yr,species_count_yr$x.x/species_count_yr$x.y)
+lines(species_count_yr$yr,species_count_yr$x.x/species_count_yr$x.y)
+
 # convert to regular timeseries -------------------------------------------------------------------
 species_count_ts = periods_to_ts(species)
-pp_ts = ts(species_count_ts$x,
+dm_ts = ts(species_count_ts$x,
            start=c(as.integer(format(head(species_count_ts$date,1),'%Y')),
                    as.integer(format(head(species_count_ts$date,1),'%m'))),
            end=c(as.integer(format(tail(species_count_ts$date,1),'%Y')),
                  as.integer(format(tail(species_count_ts$date,1),'%m'))),
            freq=12)
 
-pp_approx = na.approx(pp_ts)
+dm_approx = na.approx(dm_ts)
 
 # extracting trends-----------------------------------------------------------------------------
 time_lm = lm(species_count_ts$x~species_count_ts$date)
@@ -59,9 +62,9 @@ summary(time_lm)
 abline(time_lm)
 
 # smoothing -----------------------------------------------------------------------------------
-pp_smooth = SMA(pp_approx,12)
-plot(pp_smooth)
+dm_smooth = SMA(dm_approx,12)
+plot(dm_smooth)
 
 #decompose ---------------------------------------------------------------------------
-pp_decom = decompose(pp_approx)
-plot(pp_decom)
+dm_decom = decompose(dm_approx)
+plot(dm_decom)
