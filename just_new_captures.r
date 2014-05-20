@@ -7,6 +7,6 @@ just_new_captures = function(dat) {
   noleft = newrt[newrt$ltag =='',]
   
   newrats = rbind(newboth,noleft)
-  sort()
+  newrats = newrats[order(newrats$yr,newrats$mo,newrats$dy),]
   return(newrats)
 }
