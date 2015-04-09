@@ -22,7 +22,7 @@ periodplots = aggregate(nonemptyplots$yr,by=list(period=nonemptyplots$period,plo
 plotsperperiod = aggregate(periodplots$plot,by=list(period=periodplots$period),FUN=length)
 
 # =====================================================================
-# total abundance through time
+# plot total abundance through time
 
 periods = merge(periods,plotsperperiod,by='period')
 periods$abundperplot = periods$x.x/periods$x.y
@@ -31,3 +31,18 @@ periodabund = merge(periods,periodinfo,by='period')
 periodabund$date = as.Date(paste(periodabund$yr,periodabund$mo,periodabund$dy,sep='-'))
 
 plot(periodabund$date,periodabund$abundperplot,xlab='',ylab='# rodents per plot',main='Rodent abundance through time')
+
+# =======================================================================
+# create data frame to look for largest drop in abund/plot between sampling periods
+
+periods = aggregate(datc$species,by=list(period=datc$period),FUN=length)
+nonemptyplots = datc[!datc$note1 %in% c(4,8),]
+periodplots = aggregate(nonemptyplots$yr,by=list(period=nonemptyplots$period,plot=nonemptyplots$plot),FUN=length)
+plotsperperiod = aggregate(periodplots$plot,by=list(period=periodplots$period),FUN=length)
+
+periods = merge(periods,plotsperperiod,by='period')
+periods$abundperplot = periods$x.x/periods$x.y
+periods$diff[2:434] = diff(periods$abundperplot)
+
+abunddrop = periods[order(periods$diff),]
+head(abunddrop)
