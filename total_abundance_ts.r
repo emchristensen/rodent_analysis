@@ -2,8 +2,7 @@
 
 # =========================================================================
 # Rodent data
-dat = read.csv('data/Rodents.csv',as.is=TRUE,colClasses=c(note1='character',
-                                                                         tag='character'))
+dat = read.csv('data/Rodents.csv',as.is=TRUE,colClasses=c(note1='character',tag='character'))
 
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
@@ -30,7 +29,7 @@ periods$abundperplot = periods$x.x/periods$x.y
 periodabund = merge(periods,periodinfo,by='period')
 periodabund$date = as.Date(paste(periodabund$yr,periodabund$mo,periodabund$dy,sep='-'))
 
-plot(periodabund$date,periodabund$abundperplot,xlab='',ylab='# rodents per plot',main='Rodent abundance through time')
+plot(periodabund$date,periodabund$abundperplot,xlab='',ylab='# animals per plot',main='Abundance through time')
 
 # =======================================================================
 # create data frame to look for largest drop in abund/plot between sampling periods
