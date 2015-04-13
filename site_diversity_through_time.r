@@ -50,4 +50,4 @@ sp_diversity = merge(sp_diversity,periodinfo,by='period')
 # ============================================================================
 # plot results
 
-plot(sp_diversity$date,sp_diversity$species,ylab='# species',xlab='',main='Species Diversity through time')
+plot(sp_diversity$date,sp_diversity$species,ylab='# species',xlab='',main='Species richness through time')
