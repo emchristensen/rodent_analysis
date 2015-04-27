@@ -12,7 +12,8 @@ dat = read.csv('data/Rodents.csv',as.is=TRUE,colClasses=c(note1='character',tag=
 dat$species[is.na(dat$species)] = "NA"
 
 dat1 = dat[dat$period==period1,]
-datc = dat1[dat1$plot %in% c(2,4,8,11,12,14,17,22),]
+#datc = dat1[dat1$plot %in% c(2,4,8,11,12,14,17,22),]
+datc = dat1[dat1$plot %in% c(4,11,14,17),]
 
 rodentinfo = read.csv('data/rodent_avg_meas.csv',as.is=T)
 rodentinfo$species_id[is.na(rodentinfo$species)] = 'NA'
