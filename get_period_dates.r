@@ -19,6 +19,22 @@ get_period_dates = function(dat) {
 dat = read.csv('data/Rodents.csv')
 pframe = get_period_dates(dat)
 
+# ===========================================================================
+# find number of plots trapped per period
+
+trapped = dat[!dat$note1 %in% c(4,8),]
+count_per_plot = aggregate(trapped$plot,
+                           by=list(period=trapped$period,plot=trapped$plot),
+                           FUN=length)
+
+plot_per_period = aggregate(count_per_plot$plot,
+                            by=list(period=count_per_plot$period),
+                            FUN=length)
+# ===========================================================================
+
+pframe = merge(pframe,plot_per_period,by='period')
+names(pframe) = c('period','mo','dy','yr','date','plots')
+
 write.csv(pframe,file='data/Period_dates_single.csv',row.names=F)
 
 rm(list=ls(all=TRUE))
