@@ -2,14 +2,16 @@
 # with regular spacing between time steps
 
 
-source('rodent_analysis/get_period_dates.r')
+#source('rodent_analysis/get_period_dates.r')
 
 library(sqldf)
 
 period_to_ts = function(dat) {
+  # dat is a data frame with columns for period and x (whatever the measure of interest is)
+  
+    pframe = read.csv('C:/Users/EC/Desktop/Period_dates_single.csv')
+    pframe$date = as.Date(pframe$date,format='%m/%d/%Y')
 
-  pframe = get_period_dates(dat)
-  #pframe$date = as.Date(paste(pframe$yr,pframe$mo,pframe$dy,sep='-'))
   start = head(pframe,1)
   end = tail(pframe,1)
   desired_dates = data.frame(date=seq.Date(from=as.Date('1977-07-15'),
@@ -24,13 +26,12 @@ period_to_ts = function(dat) {
   }
   desired_dates$period = p
   
-  count_period = aggregate(dat$yr,
-                           by=list(period=dat$period),
-                           FUN=length)
-  
+
   count_ts = sqldf("SELECT * 
                       FROM desired_dates
-                      LEFT JOIN count_period USING(period)")
+                      LEFT JOIN dat USING(period)")
   countts = ts(count_ts$x,start=c(1977,7),end=c(end$yr,end$mo),freq=12)
   return(countts)
 }
+
+#abund.ts = period_to_ts(dat)

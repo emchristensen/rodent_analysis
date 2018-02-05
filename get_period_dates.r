@@ -37,4 +37,4 @@ names(pframe) = c('period','mo','dy','yr','date','plots')
 
 write.csv(pframe,file='data/Period_dates_single.csv',row.names=F)
 
-rm(list=ls(all=TRUE))
+#rm(list=ls(all=TRUE))
